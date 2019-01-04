@@ -1,0 +1,73 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <groupId>io.confluent.training</groupId>
+ <artifactId>custom-partitioner</artifactId>
+ <version>0.0.1-SNAPSHOT</version>
+ <packaging>jar</packaging>
+
+ <properties>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <maven.compiler.source>1.8</maven.compiler.source>
+  <maven.compiler.target>1.8</maven.compiler.target>
+  <kafka.client.version>2.0.0</kafka.client.version>
+  <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
+ </properties>
+
+ <dependencies>
+
+  <dependency>
+   <groupId>org.apache.kafka</groupId>
+   <artifactId>kafka-clients</artifactId>
+   <version>${kafka.client.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.slf4j</groupId>
+   <artifactId>slf4j-log4j12</artifactId>
+   <version>${slf4j-log4j12.version}</version>
+  </dependency>
+
+ </dependencies>
+
+ <build>
+
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.8.0</version>
+    <configuration>
+     <source>${maven.compiler.source}</source>
+     <target>${maven.compiler.target}</target>
+    </configuration>
+   </plugin>
+
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>3.2.1</version>
+    <executions>
+     <execution>
+      <phase>package</phase>
+      <goals>
+       <goal>shade</goal>
+      </goals>
+      <configuration>
+       <transformers>
+        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+         <mainClass>clients.CustomPartitioner</mainClass>
+        </transformer>
+       </transformers>
+      </configuration>
+     </execution>
+    </executions>
+    <configuration>
+     <finalName>app</finalName>
+    </configuration>
+   </plugin>
+   
+  </plugins>
+ </build>
+
+</project>
