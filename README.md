@@ -1,12 +1,12 @@
-# Confluent Apache Kafka for Developers Course
+# Confluent Apache Kafka for Developers Course - Adapted
 
 This is a fork of [confluentinc/training-developer-src](https://github.com/confluentinc/training-developer-src]) with the following enhancements:
 
-1. It allows running the exercise examples in the host machine (not only within the openjdk docker container),
-   especially directly in an IDE (Eclipse, IntelliJ).
-1. The Java samples are available also as ***Maven*** projects.
+1. It allows running the exercise examples in the ***host machine*** (not only within the openjdk docker container),
+   especially directly in an IDE (*Eclipse*, *IntelliJ IDEA*).
+1. All Java samples can be built also as ***Maven*** based projects (parallel to *Gradle*)
 
-## Details for Enhancement 1
+### Details for Enhancement 1
 
 The following changes were made or have to be made
 
@@ -25,8 +25,15 @@ The following projects are also available as Maven projects in parallel to Gradl
 - *kafka-avro/producer*
 - *kafka-avro/converter*
 - *kafka-avro/consumer*
+- *stream-app*
+- *streams-app-consumer*
 
-The additional `pom.xml` files are available in the *solutions* folder of each project. For creating an executable *"uber"* jar, the Maven *shade* plugin ist used. All projects can be built and executed with
+The additional `pom.xml` files are available in the *solutions* folder of each project.
+
+- For creating an executable *"uber"* jar, the Maven *org.apache.maven.plugins:maven-shade-plugin* is used.
+- For creating the Java classes from AVRO, the *org.apache.avro:avro-maven-plugin* is used.
+   
+All projects can be built and executed with
 
 ```
 mvn package
