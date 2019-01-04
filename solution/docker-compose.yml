@@ -12,6 +12,8 @@ services:
   kafka:
     image: "confluentinc/cp-enterprise-kafka:5.0.0"
     container_name: kafka
+    ports:
+      - "9092:9092"
     networks:
       - confluent
     environment:
@@ -29,6 +31,8 @@ services:
   schema-registry:
     image: "confluentinc/cp-schema-registry:5.0.0"
     container_name: schema-registry
+    ports:
+      - "8081:8081"
     networks:
       - confluent
     environment:
@@ -73,6 +77,8 @@ services:
   rest-proxy:
     image: confluentinc/cp-kafka-rest:5.0.0
     container_name: rest-proxy
+    ports:
+      - "8082:8082"
     networks:
       - confluent
     environment:
@@ -80,6 +86,7 @@ services:
       KAFKA_REST_BOOTSTRAP_SERVERS: kafka:9092
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_REST_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
 
   ksql-server:
     image: "confluentinc/cp-ksql-server:5.0.0"
