@@ -1,0 +1,142 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <groupId>io.confluent.training</groupId>
+ <artifactId>shakespeare-converter</artifactId>
+ <version>0.0.1-SNAPSHOT</version>
+ <packaging>jar</packaging>
+
+ <name>shakespeare-converter</name>
+
+ <properties>
+  <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <maven.compiler.source>1.8</maven.compiler.source>
+  <maven.compiler.target>1.8</maven.compiler.target>
+  <kafka.client.version>2.0.0</kafka.client.version>
+  <confluent.version>5.0.0</confluent.version>
+  <avro.version>1.8.2</avro.version>
+  <slf4j-log4j12.version>1.7.25</slf4j-log4j12.version>
+ </properties>
+
+ <repositories>
+  <repository>
+   <id>apache-repo</id>
+   <name>Apache Repository</name>
+   <url>https://repository.apache.org/content/repositories/releases</url>
+   <releases>
+    <enabled>true</enabled>
+   </releases>
+   <snapshots>
+    <enabled>false</enabled>
+   </snapshots>
+  </repository>
+  <repository>
+   <id>confluent</id>
+   <url>http://packages.confluent.io/maven/</url>
+  </repository>
+ </repositories>
+
+ <dependencies>
+
+  <dependency>
+   <groupId>org.apache.kafka</groupId>
+   <artifactId>kafka-clients</artifactId>
+   <version>${kafka.client.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.apache.avro</groupId>
+   <artifactId>avro</artifactId>
+   <version>${avro.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>io.confluent</groupId>
+   <artifactId>kafka-avro-serializer</artifactId>
+   <version>${confluent.version}</version>
+  </dependency>
+  <dependency>
+   <groupId>org.slf4j</groupId>
+   <artifactId>slf4j-log4j12</artifactId>
+   <version>${slf4j-log4j12.version}</version>
+  </dependency>
+
+ </dependencies>
+
+ <build>
+
+  <plugins>
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>3.8.0</version>
+    <configuration>
+     <source>${maven.compiler.source}</source>
+     <target>${maven.compiler.target}</target>
+    </configuration>
+   </plugin>
+
+   <plugin>
+    <groupId>org.apache.avro</groupId>
+    <artifactId>avro-maven-plugin</artifactId>
+    <version>${avro.version}</version>
+    <executions>
+     <execution>
+      <phase>generate-sources</phase>
+      <goals>
+       <goal>schema</goal>
+      </goals>
+      <configuration>
+       <sourceDirectory>${project.basedir}/src/main/avro</sourceDirectory>
+      </configuration>
+     </execution>
+    </executions>
+   </plugin>
+
+   <plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>build-helper-maven-plugin</artifactId>
+    <version>3.0.0</version>
+    <executions>
+     <execution>
+      <id>add-source</id>
+      <phase>generate-sources</phase>
+      <goals>
+       <goal>add-source</goal>
+      </goals>
+      <configuration>
+       <sources>
+        <source>target/generated-sources/avro</source>
+       </sources>
+      </configuration>
+     </execution>
+    </executions>
+   </plugin>
+
+   <plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-shade-plugin</artifactId>
+    <version>3.2.1</version>
+    <executions>
+     <execution>
+      <phase>package</phase>
+      <goals>
+       <goal>shade</goal>
+      </goals>
+      <configuration>
+       <transformers>
+        <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+         <mainClass>clients.ShakespeareConverter</mainClass>
+        </transformer>
+       </transformers>
+      </configuration>
+     </execution>
+    </executions>
+    <configuration>
+     <finalName>app</finalName>
+    </configuration>
+   </plugin>
+
+  </plugins>
+ </build>
+
+</project>
